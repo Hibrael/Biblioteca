@@ -55,7 +55,115 @@ namespace Biblioteca
                         break;
 
                     case "2":
-                        // Implementaremos em seguida
+                        Console.WriteLine("--- LISTA DE LEITORES ---");
+                        if (listaDeLeitores.Count == 0)
+                        {
+                            Console.WriteLine("Nenhum leitor cadastrado.");
+                        }
+                        else
+                        {
+                            foreach (Leitor leitor in listaDeLeitores)
+                            {
+                                Console.WriteLine($"Nome: {leitor.nome}, CPF: {leitor.cpf}");
+                            }
+                        }
+                        break;
+
+                    case "3":
+                        Console.WriteLine("--- EDITAR LEITOR ---");
+                        Console.Write("Digite o CPF do leitor que deseja editar: ");
+                        string cpfParaEditar = Console.ReadLine();
+
+                        Leitor leitorParaEditar = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfParaEditar);
+
+                        if (leitorParaEditar != null)
+                        {
+                            Console.Write("Digite o novo nome do leitor: ");
+                            string novoNome = Console.ReadLine();
+                            leitorParaEditar.nome = novoNome;
+                            Console.WriteLine("Leitor editado com sucesso!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Erro: Leitor não encontrado!");
+                        }
+                        break;
+
+                    case "4":
+                        Console.WriteLine("--- EXCLUIR LEITOR ---");
+                        Console.Write("Digite o CPF do leitor que deseja excluir: ");
+                        string cpfParaExcluir = Console.ReadLine();
+
+                        Leitor leitorParaExcluir = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfParaExcluir);
+
+                        if (leitorParaExcluir != null)
+                        {
+                            listaDeLeitores.Remove(leitorParaExcluir);
+                            Console.WriteLine("Leitor excluído com sucesso!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Erro: Leitor não encontrado!");
+                        }
+                        break;
+
+                    case "5":
+                        Console.WriteLine("--- INCLUIR LIVRO ---");
+                        Console.Write("CPF do leitor para adicionar o livro: ");
+                        string cpfLeitorLivro = Console.ReadLine();
+
+                        Leitor leitorLivro = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorLivro);
+
+                        if (leitorLivro != null)
+                        {
+                            Console.Write("Digite o título do livro: ");
+                            string tituloLivro = Console.ReadLine();    
+                            Console.Write("Digite o autor do livro: ");
+                            string autorLivro = Console.ReadLine(); 
+                            Livro novoLivro = new Livro(tituloLivro, autorLivro);
+                            leitorLivro.livrosDoLeitor.Add(novoLivro);
+                            Console.WriteLine("Livro adicionado com sucesso!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Erro: Leitor não encontrado!");
+
+                        }
+                        break;
+
+                    case "6":
+                        Console.WriteLine("--- EDITAR LIVRO ---");
+                        Console.Write("CPF do leitor para editar o livro: ");
+                        string cpfLeitorEditarLivro = Console.ReadLine();
+
+                        Leitor leitorEditarLivro = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorEditarLivro);
+
+                        if (leitorEditarLivro != null)
+                        {
+                            Console.Write("Digite o título do livro que deseja editar: ");
+                            string tituloLivroEditar = Console.ReadLine();
+
+                            Livro livroParaEditar = leitorEditarLivro.livrosDoLeitor.Find(livroAtual => livroAtual.titulo == tituloLivroEditar);
+
+                            if (livroParaEditar != null)
+                            {
+                                Console.Write("Digite o novo título do livro: ");
+                                string novoTitulo = Console.ReadLine();
+                                Console.Write("Digite o novo autor do livro: ");
+                                string novoAutor = Console.ReadLine();
+                                livroParaEditar.titulo = novoTitulo;
+                                livroParaEditar.autor = novoAutor;
+                                Console.WriteLine("Livro editado com sucesso!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Erro: Livro não encontrado!");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Erro: Leitor não encontrado!");
+                        }
                         break;
 
                     case "0":
