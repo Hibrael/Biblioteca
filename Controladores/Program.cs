@@ -166,6 +166,155 @@ namespace Biblioteca
                         }
                         break;
 
+                    case "7":
+                        Console.WriteLine("--- REMOVER LIVRO ---");
+                        Console.Write("CPF do leitor para editar o livro: ");
+                        string cpfLeitorRemoverLivro = Console.ReadLine();
+
+                        Leitor leitorRemoverLivro = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorRemoverLivro);
+
+                        if (leitorRemoverLivro != null)
+                        {
+                            Console.Write("Digite o título do livro que deseja remover: ");
+                            string tituloLivroRemover = Console.ReadLine();
+
+                            Livro livroParaRemover = leitorRemoverLivro.livrosDoLeitor.Find(livroAtual => livroAtual.titulo == tituloLivroRemover);
+
+                            if (livroParaRemover != null)
+                            {
+                                leitorRemoverLivro.livrosDoLeitor.Remove(livroParaRemover);
+                                Console.WriteLine("Livro removido com sucesso!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Erro: Livro não encontrado!");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Erro: Leitor não encontrado!");
+                        }
+
+                        break;
+
+                    case "8":
+                        Console.WriteLine("--- DOAR LIVRO ---");
+                        Console.Write("CPF do leitor que irá doar o livro: ");
+                        string cpfLeitorDoar = Console.ReadLine();
+
+                        Leitor leitorDoar = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorDoar);
+
+                        if (leitorDoar != null)
+                        {
+                            Console.Write("Digite o título do livro que deseja doar: ");
+                            string tituloLivroDoar = Console.ReadLine();
+
+                            Livro livroParaDoar = leitorDoar.livrosDoLeitor.Find(livroAtual => livroAtual.titulo == tituloLivroDoar);
+
+                            if (livroParaDoar != null)
+                            {
+                                Console.Write("CPF do leitor que irá receber o livro: ");
+                                string cpfLeitorReceber = Console.ReadLine();
+
+                                Leitor leitorReceber = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorReceber);
+
+                                if (leitorReceber != null)
+                                {
+                                    leitorDoar.livrosDoLeitor.Remove(livroParaDoar);
+                                    leitorReceber.livrosDoLeitor.Add(livroParaDoar);
+                                    Console.WriteLine("Livro doado com sucesso!");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Erro: Leitor destinatário não encontrado!");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Erro: Livro não encontrado!");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Erro: Leitor doador não encontrado!");
+                        }
+                        break;
+
+                    case "9":
+                        Console.WriteLine("--- LISTA COMPLETA DE LEITORES E SEUS LIVROS ---");
+                        if (listaDeLeitores.Count == 0)
+                        {
+                            Console.WriteLine("Nenhum leitor cadastrado.");
+                        }
+                        else
+                        {
+                            foreach (Leitor leitor in listaDeLeitores)
+                            {
+                                Console.WriteLine($"Nome: {leitor.nome}, CPF: {leitor.cpf}");
+                                if (leitor.livrosDoLeitor.Count == 0)
+                                {
+                                    Console.WriteLine("  Nenhum livro cadastrado para este leitor.");
+                                }
+                                else
+                                {
+                                    foreach (Livro livro in leitor.livrosDoLeitor)
+                                    {
+                                        Console.WriteLine($"  Título: {livro.titulo}, Autor: {livro.autor}");
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
+                    case "10":
+                        Console.WriteLine("--- LISTAR LEITOR ESPECÍFICO E SEUS LIVROS ---");
+                        Console.Write("Digite o CPF do leitor que deseja listar: ");
+                        string cpfLeitorListar = Console.ReadLine();
+
+                        Leitor leitorListar = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorListar);
+
+                        if (leitorListar != null)
+                        {
+                            Console.WriteLine($"Nome: {leitorListar.nome}, CPF: {leitorListar.cpf}");
+                            if (leitorListar.livrosDoLeitor.Count == 0)
+                            {
+                                Console.WriteLine("  Nenhum livro cadastrado para este leitor.");
+                            }
+                            else
+                            {
+                                foreach (Livro livro in leitorListar.livrosDoLeitor)
+                                {
+                                    Console.WriteLine($"  Título: {livro.titulo}, Autor: {livro.autor}");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Erro: Leitor não encontrado!");
+                        }
+                        break;
+
+                    case "11":
+                        Console.WriteLine("--- PESQUISAR POR LIVRO ESPECÍFICO ---");
+                        Console.Write("Digite o título do livro que deseja pesquisar: ");
+                        string tituloLivroPesquisar = Console.ReadLine();
+
+                        List<Leitor> leitoresComLivro = listaDeLeitores.FindAll(leitorAtual => leitorAtual.livrosDoLeitor.Exists(livroAtual => livroAtual.titulo == tituloLivroPesquisar));
+
+                        if (leitoresComLivro.Count > 0)
+                        {
+                            Console.WriteLine($"O livro '{tituloLivroPesquisar}' está com os seguintes leitores:");
+                            foreach (Leitor leitor in leitoresComLivro)
+                            {
+                                Console.WriteLine($"Nome: {leitor.nome}, CPF: {leitor.cpf}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Nenhum leitor encontrado com este livro.");
+                        }
+                        break;
+
                     case "0":
                         Console.WriteLine("Saindo do sistema...");
                         break;
