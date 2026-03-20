@@ -323,7 +323,7 @@ namespace Biblioteca
                         Console.WriteLine("Opcao invalida. Tente novamente.");
                         break;
                 }
-
+                Console.Clear();
                 Console.WriteLine(); 
             }
         }
