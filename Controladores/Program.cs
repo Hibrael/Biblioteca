@@ -28,29 +28,36 @@ namespace Biblioteca
                 Console.WriteLine("0 - Sair do programa");
                 Console.Write("Digite a opcao desejada: ");
 
-                opcaoEscolhida = Console.ReadLine();
+                opcaoEscolhida = Console.ReadLine() ?? "";
 
                 switch (opcaoEscolhida)
                 {
                     case "1":
                         Console.WriteLine("--- CADASTRAR NOVO LEITOR ---");
                         Console.Write("Digite o nome do leitor: ");
-                        string nomeDoLeitor = Console.ReadLine();
+                        string nomeDoLeitor = Console.ReadLine() ?? "";
 
                         Console.Write("Digite o CPF do leitor: ");
-                        string cpfDoLeitor = Console.ReadLine();
+                        string cpfDoLeitor = Console.ReadLine() ?? "";
 
-                        bool cpfJaExiste = listaDeLeitores.Exists(leitorAtual => leitorAtual.cpf == cpfDoLeitor);
-
-                        if (cpfJaExiste)
+                        if (!valida_cpf(cpfDoLeitor))
                         {
-                            Console.WriteLine("Erro: Já existe um leitor cadastrado com este CPF!");
+                            Console.WriteLine("Erro: CPF inválido. O CPF deve conter no mínimo 11 dígitos numéricos!");
                         }
                         else
                         {
-                            Leitor novoLeitor = new Leitor(nomeDoLeitor, cpfDoLeitor);
-                            listaDeLeitores.Add(novoLeitor);
-                            Console.WriteLine("Leitor cadastrado com sucesso!");
+                            bool cpfJaExiste = listaDeLeitores.Exists(leitorAtual => leitorAtual.cpf == cpfDoLeitor);
+
+                            if (cpfJaExiste)
+                            {
+                                Console.WriteLine("Erro: Já existe um leitor cadastrado com este CPF!");
+                            }
+                            else
+                            {
+                                Leitor novoLeitor = new Leitor(nomeDoLeitor, cpfDoLeitor);
+                                listaDeLeitores.Add(novoLeitor);
+                                Console.WriteLine("Leitor cadastrado com sucesso!");
+                            }
                         }
                         break;
 
@@ -72,14 +79,14 @@ namespace Biblioteca
                     case "3":
                         Console.WriteLine("--- EDITAR LEITOR ---");
                         Console.Write("Digite o CPF do leitor que deseja editar: ");
-                        string cpfParaEditar = Console.ReadLine();
+                        string cpfParaEditar = Console.ReadLine() ?? "";
 
-                        Leitor leitorParaEditar = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfParaEditar);
+                        Leitor? leitorParaEditar = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfParaEditar);
 
                         if (leitorParaEditar != null)
                         {
                             Console.Write("Digite o novo nome do leitor: ");
-                            string novoNome = Console.ReadLine();
+                            string novoNome = Console.ReadLine() ?? "";
                             leitorParaEditar.nome = novoNome;
                             Console.WriteLine("Leitor editado com sucesso!");
                         }
@@ -92,9 +99,9 @@ namespace Biblioteca
                     case "4":
                         Console.WriteLine("--- EXCLUIR LEITOR ---");
                         Console.Write("Digite o CPF do leitor que deseja excluir: ");
-                        string cpfParaExcluir = Console.ReadLine();
+                        string cpfParaExcluir = Console.ReadLine() ?? "";
 
-                        Leitor leitorParaExcluir = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfParaExcluir);
+                        Leitor? leitorParaExcluir = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfParaExcluir);
 
                         if (leitorParaExcluir != null)
                         {
@@ -110,16 +117,16 @@ namespace Biblioteca
                     case "5":
                         Console.WriteLine("--- INCLUIR LIVRO ---");
                         Console.Write("CPF do leitor para adicionar o livro: ");
-                        string cpfLeitorLivro = Console.ReadLine();
+                        string cpfLeitorLivro = Console.ReadLine() ?? "";
 
                         Leitor leitorLivro = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorLivro);
 
                         if (leitorLivro != null)
                         {
                             Console.Write("Digite o título do livro: ");
-                            string tituloLivro = Console.ReadLine();    
+                            string tituloLivro = Console.ReadLine() ?? "";    
                             Console.Write("Digite o autor do livro: ");
-                            string autorLivro = Console.ReadLine(); 
+                            string autorLivro = Console.ReadLine() ?? ""; 
                             Livro novoLivro = new Livro(tituloLivro, autorLivro);
                             leitorLivro.livrosDoLeitor.Add(novoLivro);
                             Console.WriteLine("Livro adicionado com sucesso!");
@@ -127,30 +134,30 @@ namespace Biblioteca
                         else
                         {
                             Console.WriteLine("Erro: Leitor não encontrado!");
-
                         }
                         break;
 
                     case "6":
                         Console.WriteLine("--- EDITAR LIVRO ---");
                         Console.Write("CPF do leitor para editar o livro: ");
-                        string cpfLeitorEditarLivro = Console.ReadLine();
+                        string cpfLeitorEditarLivro = Console.ReadLine() ?? "";
 
-                        Leitor leitorEditarLivro = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorEditarLivro);
+                        Leitor? leitorEditarLivro = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorEditarLivro);
 
                         if (leitorEditarLivro != null)
                         {
                             Console.Write("Digite o título do livro que deseja editar: ");
-                            string tituloLivroEditar = Console.ReadLine();
+                            string tituloLivroEditar = Console.ReadLine() ?? "";
+                            string tituloLivroEditarLower = tituloLivroEditar?.ToLowerInvariant() ?? "";
 
-                            Livro livroParaEditar = leitorEditarLivro.livrosDoLeitor.Find(livroAtual => livroAtual.titulo == tituloLivroEditar);
+                            Livro? livroParaEditar = leitorEditarLivro.livrosDoLeitor.Find(livroAtual => (livroAtual.titulo?.ToLowerInvariant() ?? "") == tituloLivroEditarLower);
 
                             if (livroParaEditar != null)
                             {
                                 Console.Write("Digite o novo título do livro: ");
-                                string novoTitulo = Console.ReadLine();
+                                string novoTitulo = Console.ReadLine() ?? "";
                                 Console.Write("Digite o novo autor do livro: ");
-                                string novoAutor = Console.ReadLine();
+                                string novoAutor = Console.ReadLine() ?? "";
                                 livroParaEditar.titulo = novoTitulo;
                                 livroParaEditar.autor = novoAutor;
                                 Console.WriteLine("Livro editado com sucesso!");
@@ -168,17 +175,18 @@ namespace Biblioteca
 
                     case "7":
                         Console.WriteLine("--- REMOVER LIVRO ---");
-                        Console.Write("CPF do leitor para editar o livro: ");
-                        string cpfLeitorRemoverLivro = Console.ReadLine();
+                        Console.Write("CPF do leitor para remover o livro: ");
+                        string cpfLeitorRemoverLivro = Console.ReadLine() ?? "";
 
-                        Leitor leitorRemoverLivro = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorRemoverLivro);
+                        Leitor? leitorRemoverLivro = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorRemoverLivro);
 
                         if (leitorRemoverLivro != null)
                         {
                             Console.Write("Digite o título do livro que deseja remover: ");
-                            string tituloLivroRemover = Console.ReadLine();
+                            string tituloLivroRemover = Console.ReadLine() ?? "";
+                            string tituloLivroRemoverLower = tituloLivroRemover?.ToLowerInvariant() ?? "";
 
-                            Livro livroParaRemover = leitorRemoverLivro.livrosDoLeitor.Find(livroAtual => livroAtual.titulo == tituloLivroRemover);
+                            Livro? livroParaRemover = leitorRemoverLivro.livrosDoLeitor.Find(livroAtual => (livroAtual.titulo?.ToLowerInvariant() ?? "") == tituloLivroRemoverLower);
 
                             if (livroParaRemover != null)
                             {
@@ -194,29 +202,29 @@ namespace Biblioteca
                         {
                             Console.WriteLine("Erro: Leitor não encontrado!");
                         }
-
                         break;
 
                     case "8":
                         Console.WriteLine("--- DOAR LIVRO ---");
                         Console.Write("CPF do leitor que irá doar o livro: ");
-                        string cpfLeitorDoar = Console.ReadLine();
+                        string cpfLeitorDoar = Console.ReadLine() ?? "";
 
-                        Leitor leitorDoar = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorDoar);
+                        Leitor? leitorDoar = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorDoar);
 
                         if (leitorDoar != null)
                         {
                             Console.Write("Digite o título do livro que deseja doar: ");
-                            string tituloLivroDoar = Console.ReadLine();
+                            string tituloLivroDoar = Console.ReadLine() ?? "";
+                            string tituloLivroDoarLower = tituloLivroDoar?.ToLowerInvariant() ?? "";
 
-                            Livro livroParaDoar = leitorDoar.livrosDoLeitor.Find(livroAtual => livroAtual.titulo == tituloLivroDoar);
+                            Livro? livroParaDoar = leitorDoar.livrosDoLeitor.Find(livroAtual => (livroAtual.titulo?.ToLowerInvariant() ?? "") == tituloLivroDoarLower);
 
                             if (livroParaDoar != null)
                             {
                                 Console.Write("CPF do leitor que irá receber o livro: ");
-                                string cpfLeitorReceber = Console.ReadLine();
+                                string cpfLeitorReceber = Console.ReadLine() ?? "";
 
-                                Leitor leitorReceber = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorReceber);
+                                Leitor? leitorReceber = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorReceber);
 
                                 if (leitorReceber != null)
                                 {
@@ -269,9 +277,9 @@ namespace Biblioteca
                     case "10":
                         Console.WriteLine("--- LISTAR LEITOR ESPECÍFICO E SEUS LIVROS ---");
                         Console.Write("Digite o CPF do leitor que deseja listar: ");
-                        string cpfLeitorListar = Console.ReadLine();
+                        string cpfLeitorListar = Console.ReadLine() ?? "";
 
-                        Leitor leitorListar = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorListar);
+                        Leitor? leitorListar = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfLeitorListar);
 
                         if (leitorListar != null)
                         {
@@ -297,9 +305,10 @@ namespace Biblioteca
                     case "11":
                         Console.WriteLine("--- PESQUISAR POR LIVRO ESPECÍFICO ---");
                         Console.Write("Digite o título do livro que deseja pesquisar: ");
-                        string tituloLivroPesquisar = Console.ReadLine();
+                        string tituloLivroPesquisar = Console.ReadLine() ?? "";
+                        string tituloLivroPesquisarLower = tituloLivroPesquisar?.ToLowerInvariant() ?? "";
 
-                        List<Leitor> leitoresComLivro = listaDeLeitores.FindAll(leitorAtual => leitorAtual.livrosDoLeitor.Exists(livroAtual => livroAtual.titulo == tituloLivroPesquisar));
+                        List<Leitor> leitoresComLivro = listaDeLeitores.FindAll(leitorAtual => leitorAtual.livrosDoLeitor.Exists(livroAtual => (livroAtual.titulo?.ToLowerInvariant() ?? "") == tituloLivroPesquisarLower));
 
                         if (leitoresComLivro.Count > 0)
                         {
@@ -323,9 +332,19 @@ namespace Biblioteca
                         Console.WriteLine("Opcao invalida. Tente novamente.");
                         break;
                 }
-                Console.Clear();
-                Console.WriteLine(); 
+
+                if (opcaoEscolhida != "0")
+                {
+                    Console.WriteLine("\nPressione ENTER para continuar...");
+                    Console.ReadLine();
+                }
             }
+        }
+
+        static bool valida_cpf(string cpfDigitado)
+        {
+            string cpfLimpo = System.Text.RegularExpressions.Regex.Replace(cpfDigitado, "[^0-9]", "");
+            return cpfLimpo.Length >= 11;
         }
     }
 }
