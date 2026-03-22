@@ -79,7 +79,9 @@ namespace Biblioteca
 
                     case "3":
                         ImprimirTitulo("EDITAR LEITOR");
-                        Console.Write("Digite o CPF do leitor que deseja editar: ");
+                        if (VerificaSeTemLeitores(listaDeLeitores, "Erro: Nenhum leitor cadastrado! Cadastre um leitor antes de tentar edita-lo."))
+                        { 
+                           Console.Write("Digite o CPF do leitor que deseja editar: ");
                         string cpfParaEditar = Console.ReadLine() ?? "";
 
                         Leitor? leitorParaEditar = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfParaEditar);
@@ -96,24 +98,35 @@ namespace Biblioteca
                             ImprimirErro("Erro: Leitor não encontrado!");
                         }
                         break;
+                        }
+                        break;
+
 
                     case "4":
                         ImprimirTitulo("EXCLUIR LEITOR");
-                        Console.Write("Digite o CPF do leitor que deseja excluir: ");
-                        string cpfParaExcluir = Console.ReadLine() ?? "";
-
-                        Leitor? leitorParaExcluir = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfParaExcluir);
-
-                        if (leitorParaExcluir != null)
+                        if (VerificaSeTemLeitores(listaDeLeitores, "Erro: Nenhum leitor cadastrado! Cadastre um leitor antes de tentar excluir."))
                         {
-                            listaDeLeitores.Remove(leitorParaExcluir);
-                            ImprimirSucesso("Leitor excluuído com sucesso!");
-                        }
-                        else
-                        {
-                            ImprimirErro("Erro: Leitor não encontrado!");
+                            Console.Write("Digite o CPF do leitor que deseja excluir: ");
+                            string cpfParaExcluir = Console.ReadLine() ?? "";
+
+                            Leitor? leitorParaExcluir = listaDeLeitores.Find(leitorAtual => leitorAtual.cpf == cpfParaExcluir);
+
+                            if (leitorParaExcluir != null)
+                            {
+                                listaDeLeitores.Remove(leitorParaExcluir);
+                                ImprimirSucesso("Leitor excluído com sucesso!");
+                            }
+                            else
+                            {
+                                ImprimirErro("Erro: Leitor não encontrado!");
+                                break;
+                            }                           
+
+
                         }
                         break;
+
+                        
 
                     case "5":
                         ImprimirTitulo("INCLUIR LIVRO");
